@@ -1,5 +1,4 @@
 #include <random>
-
 #include <iostream>
 #include <vector>
 #include "User.hpp"
@@ -17,6 +16,8 @@ std::vector<User> generateUsers(unsigned int count = 1000);
 
 std::vector<Transaction> generateTransactions(std::vector<User>& users, int count = 10000);
 
+bool validateTransaction(Transaction transactionToValidate, std::vector<Transaction> transactions);
+
 int main() {
     srand(time(nullptr));
 
@@ -32,6 +33,11 @@ int main() {
 
     int index = 0;
     for (auto transaction : transactions) {
+
+        if (! validateTransaction(transaction, transactionsToAddToTheBlock)) {
+            continue;
+        }
+
         transactionsToAddToTheBlock.push_back(transaction);
 
         if (transactionsToAddToTheBlock.size() == 100) {
@@ -44,6 +50,21 @@ int main() {
     return 0;
 }
 
+bool validateTransaction(Transaction transactionToValidate, std::vector<Transaction> transactions) {
+   double balance = transactionToValidate.getSender()->getStartingBalance();
+
+    for (auto transaction : transactions) {
+        if (transaction.getSender()->getPublicKey() == transactionToValidate.getSender()->getPublicKey()) {
+            balance -= transaction.getAmount();
+        }
+        else if(transaction.getReceiver()->getPublicKey() == transactionToValidate.getSender()->getPublicKey()) {
+            balance += transaction.getAmount();
+        }
+    }
+
+    return balance >= transactionToValidate.getAmount();
+}
+
 std::vector<Transaction> generateTransactions(std::vector<User>& users, int count) {
     std::vector<Transaction> transactions;
     transactions.reserve(count);
@@ -51,7 +72,7 @@ std::vector<Transaction> generateTransactions(std::vector<User>& users, int coun
     for (int i = 0; i < count; i++) {
         User* sender = &users[rand() % users.size()];
         User* receiver = &users[rand() % users.size()];
-        double amount = rand() % (int) std::floor(sender->getBalance());
+        double amount = rand() % 1000;
 
         auto transaction = Transaction(*sender, *receiver, amount);
 
@@ -68,8 +89,8 @@ std::vector<User> generateUsers(unsigned int count) {
     for (int i = 0; i < count; i++) {
         std::string hash;
         picosha2::hash256_hex_string(std::to_string(i), hash);
-        users.emplace_back("Vartotojas no " + std::to_string(i), hash, rand() % 100000);
+        users.emplace_back("Vartotojas no " + std::to_string(i), hash, 10000);
     }
 
-    return  users;
+    return users;
 }

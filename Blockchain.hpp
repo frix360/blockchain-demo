@@ -48,5 +48,20 @@ public:
             }
         }
     }
+
+    double getBalance(const User &user) {
+        double balance = user.getStartingBalance();
+        for (auto block : blocks) {
+            for (auto transaction : block.getTransactions()) {
+                if (transaction.getSender()->getPublicKey() == user.getPublicKey()) {
+                    balance -= transaction.getAmount();
+                }
+                else if(transaction.getReceiver()->getPublicKey() == user.getPublicKey()) {
+                    balance += transaction.getAmount();
+                }
+            }
+        }
+        return balance;
+    }
 };
 #endif //BLOCKCHAIN_BLOCKCHAIN_HPP

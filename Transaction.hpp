@@ -21,6 +21,17 @@ public:
     std::string toString() {
         return sender->getPublicKey() + receiver->getPublicKey() + std::to_string(amount);
     }
+
+    User* getSender() {
+        return sender;
+    }
+
+    User* getReceiver() {
+        return receiver;
+    }
+    double getAmount() {
+        return amount;
+    }
 };
 
 

@@ -25,7 +25,7 @@ private:
     int version = 1;
     std::string merkelRootHash;
     long long nonce = 0;
-    int difficultyTarget = 5;
+    int difficultyTarget = 2;
     std::vector<Transaction> data;
 
     bool isHashVectorValid(std::string hash) {
@@ -54,6 +54,7 @@ private:
         }
         merkelRootHash = sha256(stringToHash);
     }
+
 
 public:
     Block(std::string previousHash, std::vector<Transaction> data)
@@ -90,6 +91,10 @@ public:
 
     std::string getPreviousHash() {
         return previousHash;
+    }
+
+    std::vector<Transaction> getTransactions() {
+        return data;
     }
 };
 

@@ -1,4 +1,5 @@
 #include <utility>
+
 //
 // Created by Ignas on 10/17/2019.
 //
@@ -6,29 +7,28 @@
 #ifndef BLOCKCHAIN_USER_HPP
 #define BLOCKCHAIN_USER_HPP
 
-
 #include <string>
+
 
 class User {
 private:
     std::string name;
     std::string publicKey;
-    double balance;
+    double startingBalance;
 public:
-    User(std::string name, std::string publicKey, double balance) : name(name), publicKey(publicKey), balance(balance) {}
+    User(std::string name, std::string publicKey, double startingBalance) : name(name), publicKey(publicKey), startingBalance(startingBalance) {}
 
-    std::string getName() {
+    std::string getName() const {
         return name;
     }
 
-    std::string getPublicKey() {
+    std::string getPublicKey() const {
         return publicKey;
     }
 
-    double getBalance() {
-        return balance;
+    double getStartingBalance() const {
+        return startingBalance;
     }
-
 };
 
 
