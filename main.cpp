@@ -6,6 +6,7 @@
 #include "Transaction.hpp"
 #include "Blockchain.hpp"
 #include "functions.hpp"
+#include "BlockCandidate.h"
 #include <ctime>
 #include <cmath>
 #include <algorithm>
@@ -32,7 +33,13 @@ int main() {
     Blockchain blockchain;
 
     int index = 0;
+    std::vector<BlockCandidate> blockCandidates;
+
     for (auto transaction : transactions) {
+
+        if (index >= 5) {
+            break;
+        }
 
         if (! validateTransaction(transaction, transactionsToAddToTheBlock)) {
             continue;
@@ -41,11 +48,35 @@ int main() {
         transactionsToAddToTheBlock.push_back(transaction);
 
         if (transactionsToAddToTheBlock.size() == 100) {
-            blockchain.createBlock(transactionsToAddToTheBlock);
-            std::cout << "Sugeneruotas blokas no. " << ++index  << std::endl;
+            blockCandidates.emplace_back(transactionsToAddToTheBlock);
             transactionsToAddToTheBlock.clear();
+            index++;
         }
     }
+
+    std::shuffle( blockCandidates.begin(), blockCandidates.end(), std::mt19937(std::random_device()()));
+
+    bool hashFound = false;
+    int maxTries = 10000;
+    Block *validBlock = nullptr;
+    std::string latestBlockHash = ! blockchain.getBlocks().empty() ? blockchain.getLatestBlock().getHash() : "";
+    while(!hashFound) {
+        for (const auto &blockCandidate : blockCandidates) {
+            Block* block = new Block(latestBlockHash, blockCandidate.getTransactions(), false);
+            block->generateHash(hashFound, maxTries);
+            if (hashFound) {
+                validBlock = block;
+                break;
+            }
+            else {
+                delete block;
+            }
+        }
+        maxTries *= 2;
+    }
+
+    blockchain.addBlock(*validBlock);
+
 
     return 0;
 }
