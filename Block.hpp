@@ -48,11 +48,39 @@ private:
     }
 
     void generateMerkelRootHash() {
-        std::string stringToHash;
+        std::vector<std::string> hashes;
+        hashes.reserve(data.size());
+
         for (auto transaction : data) {
-            stringToHash += transaction.toString();
+            hashes.push_back(sha256(transaction.toString()));
+
         }
-        merkelRootHash = sha256(stringToHash);
+
+        if (hashes.empty()) {
+            return;
+        }
+        else if(hashes.size() == 1) {
+           merkelRootHash = hashes[0];
+        }
+
+        while (hashes.size() > 1) {
+            if (hashes.size() % 2 != 0) {
+                hashes.push_back(hashes.back());
+            }
+
+            assert(hashes.size() % 2 == 0);
+
+            std::vector<std::string> merkle;
+
+            for (auto it = hashes.begin(); it != hashes.end(); it += 2) {
+                std::string combinedHash = *it + *(it+1);
+                merkle.push_back(sha256(combinedHash));
+            }
+
+            hashes = merkle;
+        }
+
+        merkelRootHash = hashes[0];
     }
 
 
