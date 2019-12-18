@@ -11,8 +11,8 @@
 
 ---
 ## What does this program do?
-
 This program is a the basic implementation of a working blockchain, implementing the basic blockchain principles.
+
 ---
 
 ## Changelog
