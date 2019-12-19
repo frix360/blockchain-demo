@@ -60,7 +60,7 @@ Sugeneruotas blokas no. 10
 **Added**
 - **Balance checking.**  Instead of storing balance of each user as a property, it is now dynamically calculated from the transactions data. This new balance checking logic is used to **validate** a transaction.
 - Transaction hash **validation**.
-- Block minining is now simulated according to the task description, with the use of the **BlockCandidate** class.
+- Block mining is now simulated according to the task description with the use of the **BlockCandidate** class.
 
 ---
 [v0.1](https://github.com/frix360/blockchain-demo/releases/tag/v0.1) - (2019-10-19)
