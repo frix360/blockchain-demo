@@ -40,9 +40,9 @@ Sugeneruotas blokas no. 10
 1. Get current timestamp
 2. Generate merkel root hash (currently not real merkel root hash)
 3. Generate block hash:
---  Attempt to hash all properties of the block using a hashing function. There are 2 hashing functions used in the project: **custom** function, that is not really reliable, and C++ implementation of the **sha256** algorithm (third-party library)
---  If hash does not satisfy difficulty target requirements, increase the nonce.
--- Repeat until hash satisfies difficulty target requirement.
+   -  Attempt to hash all properties of the block using a hashing function. There are 2 hashing functions used in the project: **custom** function, that is not really reliable, and C++ implementation of the **sha256** algorithm (third-party library)
+   -  If hash does not satisfy difficulty target requirements, increase the nonce.
+   - Repeat until hash satisfies difficulty target requirement.
 4. Validate the new block. 
 5. If block is valid, add created block to the blockchain.
 
